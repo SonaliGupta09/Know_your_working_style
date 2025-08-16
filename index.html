@@ -3,68 +3,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Know Your Working Style</title>
+  <title>Know your working style</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #fafafa;
       margin: 0;
-      padding: 20px;
+      padding: 0;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      background: #f8f9fa;
+      color: #333;
     }
-    .quiz-container {
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    .container {
       max-width: 600px;
       width: 100%;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       text-align: center;
     }
-    .quiz-header h2 { margin-bottom: 10px; }
-    .option {
-      display: block;
-      width: 100%;
-      padding: 14px;
-      margin: 10px 0;
-      background-color: #f1f1f1;
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .question {
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .options button {
+      padding: 10px;
       border: 1px solid #ccc;
       border-radius: 8px;
+      background: #f1f1f1;
       cursor: pointer;
-      font-size: 16px;
       transition: background 0.3s;
     }
-    .option:hover { background: #e0e0e0; }
-    .option.selected {
+    .options button:hover {
+      background: #e0e0e0;
+    }
+    .options button.selected {
       background: #007bff;
       color: white;
       border-color: #007bff;
     }
-    #next-btn {
-      margin-top: 20px;
-      padding: 12px 20px;
-      background: #007bff;
-      color: white;
+    #startBtn, #nextBtn, #submitBtn {
+      padding: 10px 20px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      background: #007bff;
+      color: white;
       font-size: 16px;
+      margin-top: 20px;
     }
-    #next-btn:hover { background: #0056b3; }
+    #result {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
-  <div class="quiz-container">
-    <div class="quiz-header">
-      <h2>Know Your Working Style</h2>
-      <p id="progress">Question 1 of 15</p>
-      <h3 id="question">Loading...</h3>
-    </div>
-    <div id="options"></div>
-    <button id="next-btn" onclick="nextQuestion()">Next</button>
+  <div class="container" id="quizContainer">
+    <h1 id="title">Know your working style</h1>
+    <button id="startBtn">Start Quiz</button>
   </div>
 
   <script>
@@ -86,82 +97,12 @@
       "My long-term career vision is to:"
     ];
 
-    const optionsList = [
-      { text: "Set direction and strategy", value: "strategist" },
-      { text: "Come up with innovative ideas", value: "innovator" },
-      { text: "Guide and advise others", value: "advisor" },
-      { text: "Enable smooth execution", value: "enabler" },
-      { text: "Don't know", value: "dontknow" }
-    ];
-
-    let currentQuestion = 0;
-    let answers = [];
-    let selectedAnswer = null;
-
-    function loadQuestion() {
-      document.getElementById("progress").innerText =
-        `Question ${currentQuestion + 1} of ${questions.length}`;
-      document.getElementById("question").innerText = questions[currentQuestion];
-
-      const optionsDiv = document.getElementById("options");
-      optionsDiv.innerHTML = "";
-
-      optionsList.forEach(opt => {
-        const btn = document.createElement("button");
-        btn.classList.add("option");
-        btn.innerText = opt.text;
-        btn.onclick = () => selectOption(btn, opt.value);
-        optionsDiv.appendChild(btn);
-      });
-    }
-
-    function selectOption(btn, value) {
-      document.querySelectorAll(".option").forEach(b => b.classList.remove("selected"));
-      btn.classList.add("selected");
-      selectedAnswer = value;
-    }
-
-    function nextQuestion() {
-      if (!selectedAnswer) {
-        alert("Please select an option.");
-        return;
-      }
-      answers.push(selectedAnswer);
-      selectedAnswer = null;
-
-      if (currentQuestion < questions.length - 1) {
-        currentQuestion++;
-        loadQuestion();
-      } else {
-        showResult();
-      }
-    }
-
-    function showResult() {
-      const counts = { strategist: 0, innovator: 0, advisor: 0, enabler: 0, dontknow: 0 };
-      answers.forEach(a => counts[a]++);
-
-      let result = "";
-      const maxType = Object.keys(counts).reduce((a,b) => counts[a] > counts[b] ? a : b);
-
-      if (counts.dontknow > 5) {
-        result = `You are yet to explore your working style. Based on a few choices, you lean a bit towards being a ${maxType}.`;
-      } else {
-        if (maxType === "strategist") result = "You are more inclined towards strategic and big-picture thinking.";
-        if (maxType === "innovator") result = "You are more inclined towards innovative and creative thinking.";
-        if (maxType === "advisor") result = "You are more inclined towards guiding, advising, and supporting others.";
-        if (maxType === "enabler") result = "You are more inclined towards organising, enabling, and execution-oriented work.";
-      }
-
-      document.querySelector(".quiz-container").innerHTML = `
-        <h2>Your Result</h2>
-        <p>${result}</p>
-        <button onclick="location.reload()">Retake Quiz</button>
-      `;
-    }
-
-    // Load first question
-    loadQuestion();
-  </script>
-</body>
-</html>
+    const options = [
+      ["Outline the long-term vision and goals", "Brainstorm fresh ideas and approaches", "Guide the team on next steps", "Organize resources and workflows", "Don’t know"],
+      ["Planning strategy for the future", "Creating something new", "Helping someone solve a challenge", "Coordinating tasks for smooth execution", "Don’t know"],
+      ["Look at the bigger picture", "Think of creative alternatives", "Ask questions and listen deeply", "Break it down into actionable steps", "Don’t know"],
+      ["Direction on long-term planning", "Out-of-the-box solutions", "Guidance and mentoring", "Help with organizing and execution", "Don’t know"],
+      ["Achieving impact through vision", "Turning new ideas into reality", "Enabling others to grow", "Ensuring flawless delivery", "Don’t know"],
+      ["Setting the strategy and direction", "Bringing in new perspectives", "Coaching or supporting teammates", "Keeping tasks on track", "Don’t know"],
+      ["Prioritize strategically", "Look for innovative shortcuts", "Motivate and reassure the team", "Create a clear plan to finish", "Don’t know"],
+      ["There’s no clear direction", "Creativity is blocked", "People are not listened to", "Processes are chaotic", "Don’t know]()
