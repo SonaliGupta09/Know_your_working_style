@@ -2,158 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Know your working style</title>
+  <title>Know Your Working Style</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      color: #333;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      background: #f4f4f9;
       margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
     }
-    .container {
+    #quiz-container {
       background: #fff;
-      padding: 20px 30px;
+      padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      max-width: 600px;
-      width: 100%;
-      text-align: center;
-    }
-    h1 {
-      margin-bottom: 20px;
-    }
-    button {
-      background: #4CAF50;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      margin-top: 20px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #45a049;
-    }
-    .question {
-      margin-bottom: 15px;
-    }
-    .options label {
-      display: block;
-      margin: 8px 0;
-      cursor: pointer;
-    }
-    .hidden {
-      display: none;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1 id="title">Know your working style</h1>
-    <button id="startBtn">Start Quiz</button>
-
-    <form id="quizForm" class="hidden">
-      <div id="questions"></div>
-      <button type="submit">Submit</button>
-    </form>
-
-    <div id="result" class="hidden"></div>
-  </div>
-
-  <script>
-    const questions = [
-      "When working on a project, I prefer to...",
-      "My teammates usually rely on me for...",
-      "I get most energized when I am...",
-      "When solving problems, I naturally...",
-      "I feel most fulfilled when I can...",
-      "I prefer tasks that allow me to...",
-      "My biggest strength in a team setting is...",
-      "I often find myself...",
-      "I enjoy situations where I can...",
-      "My friends or colleagues describe me as...",
-      "In a new situation, I usually...",
-      "What excites me most about work is...",
-      "I like to contribute by...",
-      "I feel confident when I...",
-      "I think my future growth lies in..."
-    ];
-
-    const options = ["Strategist", "Innovator", "Advisor", "Enabler", "Don't know"];
-
-    const startBtn = document.getElementById("startBtn");
-    const quizForm = document.getElementById("quizForm");
-    const questionsDiv = document.getElementById("questions");
-    const resultDiv = document.getElementById("result");
-    const title = document.getElementById("title");
-
-    startBtn.addEventListener("click", () => {
-      startBtn.classList.add("hidden");
-      title.classList.add("hidden");
-      quizForm.classList.remove("hidden");
-      loadQuestions();
-    });
-
-    function loadQuestions() {
-      questions.forEach((q, i) => {
-        const div = document.createElement("div");
-        div.classList.add("question");
-        div.innerHTML = `<p><strong>Q${i+1}:</strong> ${q}</p>`;
-        const optsDiv = document.createElement("div");
-        optsDiv.classList.add("options");
-        options.forEach(opt => {
-          const id = `q${i}_${opt}`;
-          optsDiv.innerHTML += `
-            <label><input type="radio" name="q${i}" value="${opt}" required> ${opt}</label>
-          `;
-        });
-        div.appendChild(optsDiv);
-        questionsDiv.appendChild(div);
-      });
-    }
-
-    quizForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const scores = { "Strategist":0, "Innovator":0, "Advisor":0, "Enabler":0, "Don't know":0 };
-      questions.forEach((q, i) => {
-        const answer = quizForm[`q${i}`].value;
-        scores[answer]++;
-      });
-
-      let maxType = "";
-      let maxScore = 0;
-      for (let type in scores) {
-        if (scores[type] > maxScore && type !== "Don't know") {
-          maxType = type;
-          maxScore = scores[type];
-        }
-      }
-
-      quizForm.classList.add("hidden");
-      resultDiv.classList.remove("hidden");
-
-      if (scores["Don't know"] > questions.length / 2) {
-        resultDiv.innerHTML = `
-          <h2>You are yet to fully explore your working style</h2>
-          <p>Based on your responses, you might start by exploring a <strong>${maxType}</strong> approach.</p>
-        `;
-      } else {
-        let secondary = Object.entries(scores)
-          .filter(([k]) => k !== maxType && k !== "Don't know")
-          .sort((a, b) => b[1] - a[1])[0][0];
-
-        resultDiv.innerHTML = `
-          <h2>Your Working Style Insight</h2>
-          <p>You are more inclined towards <strong>${maxType}</strong> thinking, with some tendencies of <strong>${secondary}</strong>, 
-          rather than focusing mainly on the other areas.</p>
-        `;
-      }
-    });
-  </script>
-</body>
-</html>
+      box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+      wi
