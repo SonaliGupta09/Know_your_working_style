@@ -81,7 +81,7 @@
       "Innovator",
       "Advisor",
       "Enabler",
-      "Don't know"
+      "DontKnow"
     ];
 
     let scores = {
@@ -98,9 +98,10 @@
         let quizDiv = document.getElementById("quiz");
         quizDiv.innerHTML = `
           <h2>${questions[currentQuestion]}</h2>
-          ${options.map(opt => `
-            <button class="option-btn" onclick="selectOption('${opt}')">${opt}</button>
-          `).join('')}
+          ${options.map(opt => {
+            let label = (opt === "DontKnow") ? "Don't know" : opt;
+            return `<button class="option-btn" onclick="selectOption('${opt}')">${label}</button>`;
+          }).join('')}
         `;
       } else {
         showResult();
@@ -108,7 +109,7 @@
     }
 
     function selectOption(option) {
-      if (option === "Don't know") {
+      if (option === "DontKnow") {
         dontKnowCount++;
       } else {
         scores[option]++;
