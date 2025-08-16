@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz</title>
+  <title>Know Your Working Style</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -23,4 +23,162 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       max-width: 600px;
       width: 100%;
-      text-ali
+      text-align: center;
+    }
+
+    .quiz-header h2 {
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+
+    .option {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0;
+      background-color: #f1f1f1;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      text-align: center;
+      transition: background 0.3s, border 0.3s, color 0.3s;
+    }
+
+    .option:hover {
+      background-color: #e0e0e0;
+    }
+
+    .option.selected {
+      background-color: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+
+    #next-btn {
+      margin-top: 20px;
+      padding: 12px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+
+    #next-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <div class="quiz-header">
+      <h2>Know Your Working Style</h2>
+      <p id="progress">Question 1 of 15</p>
+      <h3 id="question">When starting a new project, I naturally:</h3>
+    </div>
+    <div class="options" id="options"></div>
+    <button id="next-btn" onclick="nextQuestion()">Next</button>
+  </div>
+
+  <script>
+    const questions = [
+      "When starting a new project, I naturally:",
+      "I feel most energized when I am:",
+      "When facing a problem, my first instinct is to:",
+      "Colleagues often come to me for:",
+      "I define success as:",
+      "In a team, I usually take the role of:",
+      "When deadlines are tight, I prefer to:",
+      "I get frustrated most when:",
+      "I believe my strength lies in:",
+      "I usually contribute to meetings by:",
+      "When I delegate, I ensure:",
+      "I prefer feedback that helps me:",
+      "In times of conflict, I tend to:",
+      "I feel I am at my best when:",
+      "My long-term career vision is to:"
+    ];
+
+    const optionsList = [
+      { text: "Set direction and strategy", value: "strategist" },
+      { text: "Come up with innovative ideas", value: "innovator" },
+      { text: "Guide and advise others", value: "advisor" },
+      { text: "Enable smooth execution", value: "enabler" },
+      { text: "Don't know", value: "dontknow" }
+    ];
+
+    let currentQuestion = 0;
+    let answers = [];
+
+    function loadQuestion() {
+      document.getElementById("progress").innerText = `Question ${currentQuestion + 1} of ${questions.length}`;
+      document.getElementById("question").innerText = questions[currentQuestion];
+
+      const optionsContainer = document.getElementById("options");
+      optionsContainer.innerHTML = "";
+
+      optionsList.forEach(opt => {
+        const button = document.createElement("button");
+        button.classList.add("option");
+        button.innerText = opt.text;
+        button.onclick = () => selectOption(button, opt.value);
+        optionsContainer.appendChild(button);
+      });
+    }
+
+    let selectedAnswer = null;
+
+    function selectOption(button, answer) {
+      const options = button.parentNode.querySelectorAll(".option");
+      options.forEach(opt => opt.classList.remove("selected"));
+      button.classList.add("selected");
+      selectedAnswer = answer;
+    }
+
+    function nextQuestion() {
+      if (!selectedAnswer) {
+        alert("Please select an option before continuing.");
+        return;
+      }
+
+      answers.push(selectedAnswer);
+      selectedAnswer = null;
+
+      if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      const counts = { strategist: 0, innovator: 0, advisor: 0, enabler: 0, dontknow: 0 };
+      answers.forEach(ans => counts[ans]++);
+
+      let resultText = "";
+      const maxType = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+
+      if (counts.dontknow > 5) {
+        // if many don't know
+        resultText = `You are yet to explore your working style. Based on your few choices, you might start with being more like a ${maxType}.`;
+      } else {
+        if (maxType === "strategist") resultText = "You are more inclined towards strategic and big-picture thinking.";
+        if (maxType === "innovator") resultText = "You are more inclined towards innovative and creative thinking.";
+        if (maxType === "advisor") resultText = "You are more inclined towards guiding, advising, and supporting others.";
+        if (maxType === "enabler") resultText = "You are more inclined towards organising, enabling, and execution-oriented work.";
+      }
+
+      document.querySelector(".quiz-container").innerHTML = `
+        <h2>Your Result</h2>
+        <p>${resultText}</p>
+      `;
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
