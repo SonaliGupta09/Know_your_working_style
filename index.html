@@ -2,60 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Know Your Working Style?</title>
+  <title>Know Your Working Style</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 40px; background: #f9f9f9; }
-    .quiz-container { max-width: 700px; margin: auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-    h1 { text-align: center; }
-    .question { margin-bottom: 20px; }
-    .options label { display: block; margin: 5px 0; cursor: pointer; }
-    button { margin-top: 20px; padding: 10px 20px; font-size: 16px; cursor: pointer; }
-    .result { margin-top: 30px; padding: 20px; border-radius: 10px; background: #eef; }
-  </style>
-</head>
-<body>
-  <div class="quiz-container">
-    <h1>Know Your Working Style?</h1>
-    <form id="quizForm">
-      <!-- Question 1 -->
-      <div class="question">
-        <p>1. When starting a new project, I naturally:</p>
-        <div class="options">
-          <label><input type="radio" name="q1" value="A"> Define the direction and key priorities (Strategist)</label>
-          <label><input type="radio" name="q1" value="B"> Brainstorm fresh approaches (Innovator)</label>
-          <label><input type="radio" name="q1" value="C"> Ensure everyone understands objectives (Advisor)</label>
-          <label><input type="radio" name="q1" value="D"> Set up processes and tools (Enabler)</label>
-        </div>
-      </div>
-      <!-- Repeat similar blocks for Q2–Q15 -->
-
-      <button type="button" onclick="calculateResult()">Submit</button>
-    </form>
-    <div class="result" id="result"></div>
-  </div>
-
-  <script>
-    function calculateResult() {
-      const form = document.getElementById('quizForm');
-      const answers = new FormData(form);
-      let counts = {A:0, B:0, C:0, D:0};
-
-      for (let [key, value] of answers.entries()) {
-        counts[value]++;
-      }
-
-      // Find max score
-      let max = Math.max(counts.A, counts.B, counts.C, counts.D);
-      let style = Object.keys(counts).find(key => counts[key] === max);
-
-      let resultText = "";
-      if (style === "A") resultText = "You are a Strategist – Vision-setter and decision-driver.";
-      if (style === "B") resultText = "You are an Innovator – Creative problem-solver and idea generator.";
-      if (style === "C") resultText = "You are an Advisor – Mentor, communicator, and guide.";
-      if (style === "D") resultText = "You are an Enabler – Operational backbone and execution expert.";
-
-      document.getElementById("result").innerHTML = `<h3>${resultText}</h3>`;
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
-  </script>
-</body>
-</html>
+    .container {
+      max-width: 700px;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    h1 { margin-bottom: 20px; }
+    .question { margin: 20px 0; text-align: left; }
