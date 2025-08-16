@@ -15,22 +15,16 @@
       align-items: center;
       min-height: 100vh;
     }
-
     .quiz-container {
       background: white;
       padding: 30px;
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       max-width: 600px;
       width: 100%;
       text-align: center;
     }
-
-    .quiz-header h2 {
-      margin-bottom: 20px;
-      font-size: 22px;
-    }
-
+    .quiz-header h2 { margin-bottom: 10px; }
     .option {
       display: block;
       width: 100%;
@@ -41,35 +35,25 @@
       border-radius: 8px;
       cursor: pointer;
       font-size: 16px;
-      text-align: center;
-      transition: background 0.3s, border 0.3s, color 0.3s;
+      transition: background 0.3s;
     }
-
-    .option:hover {
-      background-color: #e0e0e0;
-    }
-
+    .option:hover { background: #e0e0e0; }
     .option.selected {
-      background-color: #007bff;
+      background: #007bff;
       color: white;
       border-color: #007bff;
     }
-
     #next-btn {
       margin-top: 20px;
       padding: 12px 20px;
-      background-color: #007bff;
+      background: #007bff;
       color: white;
       border: none;
       border-radius: 8px;
       cursor: pointer;
       font-size: 16px;
-      transition: background 0.3s;
     }
-
-    #next-btn:hover {
-      background-color: #0056b3;
-    }
+    #next-btn:hover { background: #0056b3; }
   </style>
 </head>
 <body>
@@ -77,9 +61,9 @@
     <div class="quiz-header">
       <h2>Know Your Working Style</h2>
       <p id="progress">Question 1 of 15</p>
-      <h3 id="question">When starting a new project, I naturally:</h3>
+      <h3 id="question">Loading...</h3>
     </div>
-    <div class="options" id="options"></div>
+    <div id="options"></div>
     <button id="next-btn" onclick="nextQuestion()">Next</button>
   </div>
 
@@ -112,38 +96,36 @@
 
     let currentQuestion = 0;
     let answers = [];
+    let selectedAnswer = null;
 
     function loadQuestion() {
-      document.getElementById("progress").innerText = `Question ${currentQuestion + 1} of ${questions.length}`;
+      document.getElementById("progress").innerText =
+        `Question ${currentQuestion + 1} of ${questions.length}`;
       document.getElementById("question").innerText = questions[currentQuestion];
 
-      const optionsContainer = document.getElementById("options");
-      optionsContainer.innerHTML = "";
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
 
       optionsList.forEach(opt => {
-        const button = document.createElement("button");
-        button.classList.add("option");
-        button.innerText = opt.text;
-        button.onclick = () => selectOption(button, opt.value);
-        optionsContainer.appendChild(button);
+        const btn = document.createElement("button");
+        btn.classList.add("option");
+        btn.innerText = opt.text;
+        btn.onclick = () => selectOption(btn, opt.value);
+        optionsDiv.appendChild(btn);
       });
     }
 
-    let selectedAnswer = null;
-
-    function selectOption(button, answer) {
-      const options = button.parentNode.querySelectorAll(".option");
-      options.forEach(opt => opt.classList.remove("selected"));
-      button.classList.add("selected");
-      selectedAnswer = answer;
+    function selectOption(btn, value) {
+      document.querySelectorAll(".option").forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      selectedAnswer = value;
     }
 
     function nextQuestion() {
       if (!selectedAnswer) {
-        alert("Please select an option before continuing.");
+        alert("Please select an option.");
         return;
       }
-
       answers.push(selectedAnswer);
       selectedAnswer = null;
 
@@ -157,27 +139,28 @@
 
     function showResult() {
       const counts = { strategist: 0, innovator: 0, advisor: 0, enabler: 0, dontknow: 0 };
-      answers.forEach(ans => counts[ans]++);
+      answers.forEach(a => counts[a]++);
 
-      let resultText = "";
-      const maxType = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+      let result = "";
+      const maxType = Object.keys(counts).reduce((a,b) => counts[a] > counts[b] ? a : b);
 
       if (counts.dontknow > 5) {
-        // if many don't know
-        resultText = `You are yet to explore your working style. Based on your few choices, you might start with being more like a ${maxType}.`;
+        result = `You are yet to explore your working style. Based on a few choices, you lean a bit towards being a ${maxType}.`;
       } else {
-        if (maxType === "strategist") resultText = "You are more inclined towards strategic and big-picture thinking.";
-        if (maxType === "innovator") resultText = "You are more inclined towards innovative and creative thinking.";
-        if (maxType === "advisor") resultText = "You are more inclined towards guiding, advising, and supporting others.";
-        if (maxType === "enabler") resultText = "You are more inclined towards organising, enabling, and execution-oriented work.";
+        if (maxType === "strategist") result = "You are more inclined towards strategic and big-picture thinking.";
+        if (maxType === "innovator") result = "You are more inclined towards innovative and creative thinking.";
+        if (maxType === "advisor") result = "You are more inclined towards guiding, advising, and supporting others.";
+        if (maxType === "enabler") result = "You are more inclined towards organising, enabling, and execution-oriented work.";
       }
 
       document.querySelector(".quiz-container").innerHTML = `
         <h2>Your Result</h2>
-        <p>${resultText}</p>
+        <p>${result}</p>
+        <button onclick="location.reload()">Retake Quiz</button>
       `;
     }
 
+    // Load first question
     loadQuestion();
   </script>
 </body>
