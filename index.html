@@ -24,3 +24,123 @@
     }
     h1 { margin-bottom: 20px; }
     .question { margin: 20px 0; text-align: left; }
+    .options label {
+      display: block;
+      margin: 8px 0;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .options input { margin-right: 10px; }
+    .options label:hover { background: #eef; }
+    button {
+      padding: 10px 20px;
+      margin-top: 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #4a90e2;
+      color: #fff;
+    }
+    .hidden { display: none; }
+    .result { font-size: 18px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container" id="quizContainer">
+    <h1>Know Your Working Style</h1>
+    <button onclick="startQuiz()">Start Quiz</button>
+  </div>
+
+  <script>
+    const questions = [
+      "When starting a new project, I naturally:",
+      "In high-pressure situations, I usually:",
+      "My teammates often rely on me for:",
+      "When a problem arises, I:",
+      "In meetings, I’m usually:",
+      "My biggest strength is:",
+      "If a teammate is struggling, I:",
+      "I feel most satisfied when:",
+      "My work style can be summed up as:",
+      "During brainstorming sessions, I:",
+      "When given minimal instructions, I:",
+      "I’m at my best when:",
+      "My colleagues might describe me as:",
+      "When facing a major decision, I:",
+      "My natural role in a group project is:"
+    ];
+
+    const options = [
+      ["Define the direction and key priorities", "Brainstorm fresh approaches", "Ensure everyone understands objectives", "Set up processes and tools"],
+      ["Step up and take charge of decisions", "Look for innovative shortcuts", "Keep the team reassured", "Track tasks and deadlines"],
+      ["Strategic guidance", "Creative problem-solving", "Clarifying complex topics", "Managing logistics"],
+      ["Weigh options and choose the best course", "Experiment until something works", "Explain the issue and solution", "Coordinate resources"],
+      ["Steering discussions toward decisions", "Suggesting out-of-the-box ideas", "Making sure everyone’s voice is heard", "Taking notes and action items"],
+      ["Vision and direction", "Creativity and adaptability", "Communication and empathy", "Reliability and structure"],
+      ["Reassign tasks to keep things on track", "Help them find a new approach", "Coach them through the challenge", "Take over some workload"],
+      ["A plan I designed delivers results", "My idea becomes reality", "Someone grows because of my guidance", "A project runs smoothly"],
+      ["Decisive and goal-oriented", "Innovative and experimental", "Supportive and clear", "Systematic and dependable"],
+      ["Keep the group aligned with goals", "Generate unique ideas", "Refine ideas for clarity", "Capture and organize ideas"],
+      ["Create the plan myself", "Experiment with methods", "Seek clarity and explain", "Build a checklist and execute"],
+      ["Leading a team toward a target", "Designing something new", "Guiding people to improve", "Managing moving parts"],
+      ["Bold and decisive", "Imaginative and flexible", "Patient and clear", "Organized and reliable"],
+      ["Choose quickly after seeing big picture", "Seek unconventional alternatives", "Discuss so everyone understands", "Break into steps to manage"],
+      ["The one setting direction", "The one suggesting creative solutions", "The one teaching and explaining", "The one coordinating and organizing"]
+    ];
+
+    let currentQ = 0;
+    let scores = {A:0, B:0, C:0, D:0};
+
+    function startQuiz() {
+      const container = document.getElementById("quizContainer");
+      container.innerHTML = "";
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const container = document.getElementById("quizContainer");
+      container.innerHTML = `
+        <div class="question"><h3>Q${currentQ+1}. ${questions[currentQ]}</h3></div>
+        <div class="options">
+          <label><input type="radio" name="q" value="A"> ${options[currentQ][0]}</label>
+          <label><input type="radio" name="q" value="B"> ${options[currentQ][1]}</label>
+          <label><input type="radio" name="q" value="C"> ${options[currentQ][2]}</label>
+          <label><input type="radio" name="q" value="D"> ${options[currentQ][3]}</label>
+        </div>
+        <button onclick="nextQuestion()">Next</button>
+      `;
+    }
+
+    function nextQuestion() {
+      const choice = document.querySelector('input[name="q"]:checked');
+      if (!choice) { alert("Please select an option"); return; }
+      scores[choice.value]++;
+      currentQ++;
+      if (currentQ < questions.length) {
+        showQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      const container = document.getElementById("quizContainer");
+      let max = Math.max(scores.A, scores.B, scores.C, scores.D);
+      let result = "";
+      if (scores.A === max) result = "You are a Strategist – Vision-setter and decision-driver.";
+      else if (scores.B === max) result = "You are an Innovator – Creative problem-solver and idea generator.";
+      else if (scores.C === max) result = "You are an Advisor – Mentor, communicator, and guide.";
+      else if (scores.D === max) result = "You are an Enabler – Operational backbone and execution expert.";
+      
+      container.innerHTML = `
+        <h2>Your Working Style Result</h2>
+        <div class="result">${result}</div>
+      `;
+    }
+  </script>
+</body>
+</html>
