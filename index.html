@@ -96,8 +96,8 @@
     let scores = {A:0, B:0, C:0, D:0};
 
     function startQuiz() {
-      const container = document.getElementById("quizContainer");
-      container.innerHTML = "";
+      currentQ = 0;
+      scores = {A:0, B:0, C:0, D:0};
       showQuestion();
     }
 
@@ -139,6 +139,7 @@
       container.innerHTML = `
         <h2>Your Working Style Result</h2>
         <div class="result">${result}</div>
+        <button onclick="startQuiz()">Retake Quiz</button>
       `;
     }
   </script>
