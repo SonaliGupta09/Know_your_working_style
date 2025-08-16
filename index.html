@@ -104,8 +104,25 @@
       "I feel excited when trying something new or untested.",
       "I find meaning in helping others perform at their best."
     ];
+      const options = [
+      ["Outline the long-term vision and goals", "Brainstorm fresh ideas and approaches", "Guide the team on next steps", "Organize resources and workflows", "Don’t know"],
+      ["Planning strategy for the future", "Creating something new", "Helping someone solve a challenge", "Coordinating tasks for smooth execution", "Don’t know"],
+      ["Look at the bigger picture", "Think of creative alternatives", "Ask questions and listen deeply", "Break it down into actionable steps", "Don’t know"],
+      ["Direction on long-term planning", "Out-of-the-box solutions", "Guidance and mentoring", "Help with organizing and execution", "Don’t know"],
+      ["Achieving impact through vision", "Turning new ideas into reality", "Enabling others to grow", "Ensuring flawless delivery", "Don’t know"],
+      ["Setting the strategy and direction", "Bringing in new perspectives", "Coaching or supporting teammates", "Keeping tasks on track", "Don’t know"],
+      ["Prioritize strategically", "Look for innovative shortcuts", "Motivate and reassure the team", "Create a clear plan to finish", "Don’t know"],
+      ["There’s no clear direction", "Creativity is blocked", "People are not listened to", "Processes are chaotic", "Don’t know"],
+      ["Seeing the bigger picture", "Thinking outside the box", "Empathy and guidance", "Organization and planning", "Don’t know"],
+      ["Sharing long-term insights", "Suggesting new ideas", "Asking thoughtful questions", "Summarizing and structuring action items", "Don’t know"],
+      ["It aligns with the strategy", "There’s room for creativity", "The person feels supported", "The task has clear steps", "Don’t know"],
+      ["Sharpen my strategic thinking", "Explore new approaches", "Improve my guidance for others", "Strengthen my execution skills", "Don’t know"],
+      ["Focus on long-term alignment", "Propose creative solutions", "Listen and mediate", "Create structure to resolve", "Don’t know"],
+      ["Planning the future", "Creating something new", "Guiding people", "Making things work smoothly", "Don’t know"],
+      ["Lead with strategy", "Innovate and build", "Advise and coach others", "Manage execution at scale", "Don’t know"]
+    ];
 
-    const options = ["Strategist", "Innovator", "Advisor", "Enabler", "Don't Know"];
+    const mapping = ["Strategist", "Innovator", "Advisor", "Enabler", "Don’t know"];
     let currentQuestion = 0;
     let scores = { Strategist: 0, Innovator: 0, Advisor: 0, Enabler: 0, Unknown: 0 };
     let selected = null;
