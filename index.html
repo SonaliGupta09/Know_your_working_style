@@ -3,108 +3,101 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Know Your Working Style</title>
+  <title>Know your working style</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #fff;
+      margin: 0;
+      padding: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
+      min-height: 100vh;
+      background: #f8f9fa;
+      color: #333;
     }
     .container {
       max-width: 600px;
       width: 100%;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       text-align: center;
     }
     h1 {
-      font-size: 28px;
+      font-size: 24px;
       margin-bottom: 20px;
     }
-    .btn {
-      padding: 10px 20px;
-      margin-top: 20px;
-      background: #007BFF;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    .btn:hover {
-      background: #0056b3;
+    .question {
+      margin-bottom: 20px;
+      font-weight: bold;
     }
     .options {
-      margin: 20px 0;
       display: flex;
       flex-direction: column;
       gap: 10px;
+      margin-bottom: 20px;
     }
-    .option {
+    .options button {
       padding: 10px;
       border: 1px solid #ccc;
-      border-radius: 6px;
+      border-radius: 8px;
+      background: #f1f1f1;
       cursor: pointer;
+      transition: background 0.3s;
     }
-    .option:hover {
-      background-color: #f2f2f2;
+    .options button:hover {
+      background: #e0e0e0;
     }
-    .selected {
-      background-color: #007BFF;
-      color: #fff;
+    .options button.selected {
+      background: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+    #startBtn, #nextBtn, #submitBtn {
+      padding: 10px 20px;
       border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #007bff;
+      color: white;
+      font-size: 16px;
+      margin-top: 20px;
     }
-    .progress {
-      font-size: 14px;
-      margin-bottom: 15px;
-      color: #333;
+    #result {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Landing Page -->
-    <div id="landing">
-      <h1>Know Your Working Style</h1>
-      <button class="btn" onclick="startQuiz()">Start Quiz</button>
-    </div>
-
-    <!-- Quiz Section -->
-    <div id="quiz" style="display:none;">
-      <div class="progress" id="progress"></div>
-      <h2 id="question"></h2>
-      <div class="options" id="options"></div>
-      <button class="btn" onclick="nextQuestion()">Next</button>
-    </div>
-
-    <!-- Result Section -->
-    <div id="result" style="display:none;">
-      <h2>Your Working Style</h2>
-      <p id="resultText"></p>
-    </div>
+  <div class="container" id="quizContainer">
+    <h1 id="title">Know your working style</h1>
+    <button id="startBtn">Start Quiz</button>
   </div>
 
   <script>
     const questions = [
-      "I enjoy setting long-term goals and planning how to reach them.",
-      "I like coming up with new ideas and experimenting with different approaches.",
-      "I often guide others by providing clarity and advice.",
-      "I enjoy supporting my team and making sure everyone works well together.",
-      "I am more focused on strategies than day-to-day tasks.",
-      "I get energy from brainstorming creative solutions.",
-      "People often ask me for guidance and suggestions.",
-      "I like organizing workflows and enabling others to succeed.",
-      "I focus on the bigger picture more than the details.",
-      "I enjoy innovating and thinking outside the box.",
-      "I naturally take the role of an advisor when helping others.",
-      "I ensure smooth collaboration within teams.",
-      "I think deeply about long-term impact before acting.",
-      "I feel excited when trying something new or untested.",
-      "I find meaning in helping others perform at their best."
+      "When starting a new project, I naturally:",
+      "I feel most energized when I am:",
+      "When facing a problem, my first instinct is to:",
+      "Colleagues often come to me for:",
+      "I define success as:",
+      "In a team, I usually take the role of:",
+      "When deadlines are tight, I prefer to:",
+      "I get frustrated most when:",
+      "I believe my strength lies in:",
+      "I usually contribute to meetings by:",
+      "When I delegate, I ensure:",
+      "I prefer feedback that helps me:",
+      "In times of conflict, I tend to:",
+      "I feel I am at my best when:",
+      "My long-term career vision is to:"
     ];
-      const options = [
+
+    const options = [
       ["Outline the long-term vision and goals", "Brainstorm fresh ideas and approaches", "Guide the team on next steps", "Organize resources and workflows", "Don’t know"],
       ["Planning strategy for the future", "Creating something new", "Helping someone solve a challenge", "Coordinating tasks for smooth execution", "Don’t know"],
       ["Look at the bigger picture", "Think of creative alternatives", "Ask questions and listen deeply", "Break it down into actionable steps", "Don’t know"],
@@ -121,80 +114,75 @@
       ["Planning the future", "Creating something new", "Guiding people", "Making things work smoothly", "Don’t know"],
       ["Lead with strategy", "Innovate and build", "Advise and coach others", "Manage execution at scale", "Don’t know"]
     ];
+
     const mapping = ["Strategist", "Innovator", "Advisor", "Enabler", "Don’t know"];
+
     let currentQuestion = 0;
     let answers = [];
 
     const container = document.getElementById("quizContainer");
 
     document.getElementById("startBtn").addEventListener("click", startQuiz);
-    function startQuiz() {
-      document.getElementById("landing").style.display = "none";
-      document.getElementById("quiz").style.display = "block";
-      showQuestion();
 
+    function startQuiz() {
+      showQuestion();
     }
 
     function showQuestion() {
-      document.getElementById("progress").textContent = 
-        `Question ${currentQuestion + 1} of ${questions.length}`;
-      document.getElementById("question").textContent = questions[currentQuestion];
-      const optsDiv = document.getElementById("options");
-      optsDiv.innerHTML = "";
-      options.forEach(option => {
-        const btn = document.createElement("div");
-        btn.textContent = option;
-        btn.className = "option";
-        btn.onclick = () => selectOption(btn, option);
-        optsDiv.appendChild(btn);
-      });
+      container.innerHTML = `
+        <div class="question">${questions[currentQuestion]}</div>
+        <div class="options">
+          ${options[currentQuestion].map((opt, i) => 
+            `<button onclick="selectOption(${i}, this)">${opt}</button>`
+          ).join("")}
+        </div>
+        ${currentQuestion < questions.length - 1 
+          ? `<button id="nextBtn" onclick="nextQuestion()">Next</button>`
+          : `<button id="submitBtn" onclick="showResult()">Submit</button>`}
+      `;
     }
 
-    function selectOption(element, option) {
-      document.querySelectorAll(".option").forEach(opt => opt.classList.remove("selected"));
-      element.classList.add("selected");
-      selected = option;
+    function selectOption(i, btn) {
+      answers[currentQuestion] = mapping[i];
+      const allButtons = btn.parentNode.querySelectorAll("button");
+      allButtons.forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
     }
 
     function nextQuestion() {
-      if (!selected) return alert("Please select an option before moving on.");
-      if (selected === "Don't Know") {
-        scores.Unknown++;
-      } else {
-        scores[selected]++;
-      }
-      selected = null;
-      currentQuestion++;
-      if (currentQuestion < questions.length) {
+      if (answers[currentQuestion]) {
+        currentQuestion++;
         showQuestion();
       } else {
-        showResult();
+        alert("Please select an option before moving on.");
       }
     }
 
     function showResult() {
-      document.getElementById("quiz").style.display = "none";
-      document.getElementById("result").style.display = "block";
-
-      let resultText = "";
-      const { Strategist, Innovator, Advisor, Enabler, Unknown } = scores;
-
-      if (Unknown >= questions.length / 2) {
-        // Too many don't knows
-        const maxType = Object.entries(scores)
-          .filter(([k]) => k !== "Unknown")
-          .sort((a, b) => b[1] - a[1])[0][0];
-        resultText = `You are yet to explore your working style. Based on your responses, you might start with being an ${maxType.toLowerCase()}.`;
-      } else {
-        // Find top 2 styles
-        const sorted = Object.entries(scores)
-          .filter(([k]) => k !== "Unknown")
-          .sort((a, b) => b[1] - a[1]);
-        const [top, second] = sorted;
-        resultText = `You are more inclined towards ${top[0].toLowerCase()} thinking than ${second[0].toLowerCase()} style.`;
+      if (!answers[currentQuestion]) {
+        alert("Please select an option before submitting.");
+        return;
       }
 
-      document.getElementById("resultText").textContent = resultText;
+      let counts = { "Strategist": 0, "Innovator": 0, "Advisor": 0, "Enabler": 0, "Don’t know": 0 };
+      answers.forEach(ans => counts[ans]++);
+
+      let sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+      let top = sorted[0];
+      let second = sorted[1];
+
+      let resultText = "";
+
+      if (top[0] === "Don’t know" && top[1] >= questions.length / 3) {
+        resultText = `You are yet to explore your working style. Based on your choices, you might start with ${second[0]}.`;
+      } else {
+        resultText = `You are more inclined towards ${top[0]}${second[1] > 0 ? " and " + second[0] : ""} than the others.`;
+      }
+
+      container.innerHTML = `
+        <h2>Your Result</h2>
+        <div id="result">${resultText}</div>
+      `;
     }
   </script>
 </body>
