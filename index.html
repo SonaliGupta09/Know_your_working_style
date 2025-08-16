@@ -20,4 +20,125 @@
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-      wi
+      width: 90%;
+      max-width: 600px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .option-btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 5px;
+      background: #007BFF;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .option-btn:hover {
+      background: #0056b3;
+    }
+    #result {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="quiz-container">
+    <h1>Know Your Working Style</h1>
+    <div id="quiz"></div>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const questions = [
+      "When facing a complex problem, I prefer to...",
+      "In a team, my natural tendency is to...",
+      "When starting a new project, I usually...",
+      "People often look to me for...",
+      "My strength lies in...",
+      "I feel most energized when I...",
+      "During conflicts, I usually...",
+      "I add most value to my team by...",
+      "I prefer tasks that...",
+      "I am most satisfied when I...",
+      "In uncertain situations, I...",
+      "While working on a big idea, I...",
+      "Others appreciate me most for...",
+      "I prefer learning that...",
+      "When given freedom, I like to..."
+    ];
+
+    const options = [
+      "Strategist",
+      "Innovator",
+      "Advisor",
+      "Enabler",
+      "Don't know"
+    ];
+
+    let scores = {
+      "Strategist": 0,
+      "Innovator": 0,
+      "Advisor": 0,
+      "Enabler": 0
+    };
+    let dontKnowCount = 0;
+    let currentQuestion = 0;
+
+    function showQuestion() {
+      if (currentQuestion < questions.length) {
+        let quizDiv = document.getElementById("quiz");
+        quizDiv.innerHTML = `
+          <h2>${questions[currentQuestion]}</h2>
+          ${options.map(opt => `
+            <button class="option-btn" onclick="selectOption('${opt}')">${opt}</button>
+          `).join('')}
+        `;
+      } else {
+        showResult();
+      }
+    }
+
+    function selectOption(option) {
+      if (option === "Don't know") {
+        dontKnowCount++;
+      } else {
+        scores[option]++;
+      }
+      currentQuestion++;
+      showQuestion();
+    }
+
+    function showResult() {
+      let resultDiv = document.getElementById("result");
+      document.getElementById("quiz").innerHTML = "";
+
+      let sortedScores = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+      let topStyle = sortedScores[0][0];
+      let secondStyle = sortedScores[1][0];
+
+      if (dontKnowCount > questions.length / 3) {
+        resultDiv.innerHTML = `
+          You are yet to fully explore your working style.<br>
+          Based on your responses, you might start by exploring <b>${topStyle}</b>.
+        `;
+      } else {
+        resultDiv.innerHTML = `
+          You are more inclined towards <b>${topStyle}</b> thinking, with some tendencies of <b>${secondStyle}</b>,
+          rather than focusing mainly on the other areas.
+        `;
+      }
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
