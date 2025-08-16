@@ -105,4 +105,85 @@
       ["Achieving impact through vision", "Turning new ideas into reality", "Enabling others to grow", "Ensuring flawless delivery", "Don’t know"],
       ["Setting the strategy and direction", "Bringing in new perspectives", "Coaching or supporting teammates", "Keeping tasks on track", "Don’t know"],
       ["Prioritize strategically", "Look for innovative shortcuts", "Motivate and reassure the team", "Create a clear plan to finish", "Don’t know"],
-      ["There’s no clear direction", "Creativity is blocked", "People are not listened to", "Processes are chaotic", "Don’t know]()
+      ["There’s no clear direction", "Creativity is blocked", "People are not listened to", "Processes are chaotic", "Don’t know"],
+      ["Seeing the bigger picture", "Thinking outside the box", "Empathy and guidance", "Organization and planning", "Don’t know"],
+      ["Sharing long-term insights", "Suggesting new ideas", "Asking thoughtful questions", "Summarizing and structuring action items", "Don’t know"],
+      ["It aligns with the strategy", "There’s room for creativity", "The person feels supported", "The task has clear steps", "Don’t know"],
+      ["Sharpen my strategic thinking", "Explore new approaches", "Improve my guidance for others", "Strengthen my execution skills", "Don’t know"],
+      ["Focus on long-term alignment", "Propose creative solutions", "Listen and mediate", "Create structure to resolve", "Don’t know"],
+      ["Planning the future", "Creating something new", "Guiding people", "Making things work smoothly", "Don’t know"],
+      ["Lead with strategy", "Innovate and build", "Advise and coach others", "Manage execution at scale", "Don’t know"]
+    ];
+
+    const mapping = ["Strategist", "Innovator", "Advisor", "Enabler", "Don’t know"];
+
+    let currentQuestion = 0;
+    let answers = [];
+
+    const container = document.getElementById("quizContainer");
+
+    document.getElementById("startBtn").addEventListener("click", startQuiz);
+
+    function startQuiz() {
+      showQuestion();
+    }
+
+    function showQuestion() {
+      container.innerHTML = `
+        <div class="question">${questions[currentQuestion]}</div>
+        <div class="options">
+          ${options[currentQuestion].map((opt, i) => 
+            `<button onclick="selectOption(${i}, this)">${opt}</button>`
+          ).join("")}
+        </div>
+        ${currentQuestion < questions.length - 1 
+          ? `<button id="nextBtn" onclick="nextQuestion()">Next</button>`
+          : `<button id="submitBtn" onclick="showResult()">Submit</button>`}
+      `;
+    }
+
+    function selectOption(i, btn) {
+      answers[currentQuestion] = mapping[i];
+      const allButtons = btn.parentNode.querySelectorAll("button");
+      allButtons.forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+    }
+
+    function nextQuestion() {
+      if (answers[currentQuestion]) {
+        currentQuestion++;
+        showQuestion();
+      } else {
+        alert("Please select an option before moving on.");
+      }
+    }
+
+    function showResult() {
+      if (!answers[currentQuestion]) {
+        alert("Please select an option before submitting.");
+        return;
+      }
+
+      let counts = { "Strategist": 0, "Innovator": 0, "Advisor": 0, "Enabler": 0, "Don’t know": 0 };
+      answers.forEach(ans => counts[ans]++);
+
+      let sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+      let top = sorted[0];
+      let second = sorted[1];
+
+      let resultText = "";
+
+      if (top[0] === "Don’t know" && top[1] >= questions.length / 3) {
+        resultText = `You are yet to explore your working style. Based on your choices, you might start with ${second[0]}.`;
+      } else {
+        resultText = `You are more inclined towards ${top[0]}${second[1] > 0 ? " and " + second[0] : ""} than the others.`;
+      }
+
+      container.innerHTML = `
+        <h2>Your Result</h2>
+        <div id="result">${resultText}</div>
+      `;
+    }
+  </script>
+</body>
+</html>
